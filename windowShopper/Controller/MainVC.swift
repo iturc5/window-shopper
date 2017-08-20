@@ -11,6 +11,8 @@ import UIKit
 class MainVC: UIViewController {
     @IBOutlet weak var wageTxt: CurrencyTextField!
     @IBOutlet weak var priceTxt: CurrencyTextField!
+    @IBOutlet weak var resultLbl: UILabel!
+    @IBOutlet weak var hoursLbl: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,13 +25,32 @@ class MainVC: UIViewController {
         
         wageTxt.inputAccessoryView = caltBtn
         priceTxt.inputAccessoryView = caltBtn
+        
+        resultLbl.isHidden = true
+        hoursLbl.isHidden = true
     }
     
 
     @objc func  calculate() {
-        print("we got here")
+        if let wageText = wageTxt.text, let priceTxt = priceTxt.text {//first check if the fields are not empty
+            
+            if let wage = Double(wageText), let price = Double(priceTxt) {// second convert the data in the fields in to doubles or (numbers) couse they can type letters too
+                view.endEditing(true)//clear the labels
+                resultLbl.isHidden = false//show the results
+                hoursLbl.isHidden = false
+                resultLbl.text = "\(Wage.getHours(forWage: wage, andPrice: price))"//using the clas func that we build in the wage.swift file to do the thinking and convert result to an int
+            }
+        }
+        
+        
     }
-
+    @IBAction func clearCalculatorPress(_ sender: Any) {
+        resultLbl.isHidden = true
+        hoursLbl.isHidden = true
+        wageTxt.text = ""
+        priceTxt.text = ""
+    }
+    
 
 }
 
